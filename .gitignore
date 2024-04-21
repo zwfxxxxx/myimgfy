@@ -1,0 +1,9 @@
+/gfpgan
+/paddleORC_model
+/ch_ppocr_mobile_v2.0_cls_infer
+/img
+/ch_ppocr_server_v2.0_rec_infer
+myapi/pretrained_models
+/myapi2/rembg
+/myimgfy/ch_ppocr_mobile_v2.0_cls_infer
+/myimgfy/ch_ppocr_server_v2.0_rec_infer
