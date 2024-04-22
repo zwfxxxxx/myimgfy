@@ -1,4 +1,5 @@
-from django.shortcuts import render,HttpResponse
+# 导入所需的库
+from django.shortcuts import render, HttpResponse
 import cv2
 from modelscope.outputs import OutputKeys
 from modelscope.pipelines import pipeline
@@ -14,48 +15,51 @@ import requests
 '''
 @csrf_exempt
 def obj_removal(request):
-
-    if request.method =="POST":
-
+    # 检查请求是否为POST
+    if request.method == "POST":
+        # 从请求的JSON数据中加载信息
         json_data = json.loads(request.body)
-        # input_location = 'https://modelscope.oss-cn-beijing.aliyuncs.com/test/images/image_inpainting/image_inpainting.png'
-        # input_mask_location = 'https://modelscope.oss-cn-beijing.aliyuncs.com/test/images/image_inpainting/image_inpainting_mask.png'
-        # input_location = "http://sb9lsai7u.hn-bkt.clouddn.com/" + json_data.get("input_location")
-        # print(input_location,"----")
-        #获取
-        input_url =  json_data.get("input_location")
+        # 获取输入图片的URL
+        input_url = json_data.get("input_location")
+        # 从URL获取图片内容
         response = requests.get("http://sb9lsai7u.hn-bkt.clouddn.com/" + input_url)
         image = response.content
+        # 将图片内容保存到指定路径下
         with open("obj_remove_img\\input_location.png", 'wb') as o:
-                o.write(image)
+            o.write(image)
 
-        #获取mask的base64在写入临时文件
+        # 获取输入的mask信息并解码
         base64_str = json_data.get('input_mask_location')
         base64_str = base64_str.split(",")
         input_mask = base64.b64decode(base64_str[1])
+        # 将mask内容保存到指定路径下
         with open("obj_remove_img\\input_mask_location.png", 'wb') as o:
-                o.write(input_mask)
-                # cv2.imwrite('restored_img.png', output)
+            o.write(input_mask)
 
-
-        # 获取input和mask的路径
+        # 设置输入的图片路径和mask路径
         input_location = "obj_remove_img\\input_location.png"
         input_mask_location = "obj_remove_img\\input_mask_location.png"
-        print(type(input_mask_location))
+
+        # 构建输入字典
         input = {
-                'img':input_location,
-                'mask':input_mask_location,
+            'img': input_location,
+            'mask': input_mask_location,
         }
-        print("-------")
+
+        # 初始化一个图像修复的pipeline
         inpainting = pipeline(Tasks.image_inpainting, model='damo/cv_fft_inpainting_lama')
+        # 执行图像修复操作
         result = inpainting(input)
-        print("--------")
-        vis_img = result[OutputKeys.OUTPUT_IMG]#去除对象后的图片：
-        #放入临时文件
+        # 获取修复后的图片
+        vis_img = result[OutputKeys.OUTPUT_IMG]
+        # 将修复后的图片保存到指定路径下
         cv2.imwrite('obj_remove_img\\obj_remove.png', vis_img)
-        #读取并返回结果图像
-        with open("obj_remove_img\\obj_remove.png","rb") as f:
+
+        # 将修复后的图片读取为二进制格式
+        with open("obj_remove_img\\obj_remove.png", "rb") as f:
             ret = f.read()
-        return  HttpResponse(ret)
+        # 返回修复后的图片
+        return HttpResponse(ret)
     else:
-        return HttpResponse(json.dumps({"mesg":"null"}))
+        # 返回空消息
+        return HttpResponse(json.dumps({"mesg": "null"}))
