@@ -1,5 +1,9 @@
+gfpgan
+basicsr
+facexlib
 new-basicsr
 facexlib>=0.2.5
+datasets==2.18.0
 lmdb
 numpy
 opencv-python
@@ -10,3 +14,9 @@ torch>=1.7
 torchvision
 tqdm
 yapf
+rembg
+rembg[cli]
+modelscope
+paddleocr
+paddlepaddle
+kornia
