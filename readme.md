@@ -14,13 +14,13 @@ source <venv_name>/bin/activate
 
 ##### 下载django（先激活）
 ```
-pip install django
+pip3 install django
 ```
 ##### 下载依赖
 
 
 ```
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 
