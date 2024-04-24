@@ -1,5 +1,4 @@
 gfpgan
-basicsr
 new-basicsr
 facexlib>=0.2.5
 datasets==2.18.0
