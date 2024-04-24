@@ -2,7 +2,17 @@
 ## 依赖关系和安装
 
 
-##### 下载django
+##### 创建虚拟环境
+```
+python3 -m venv <venv_name>
+```
+##### 激活虚拟环境  
+```
+source <venv_name>/bin/activate
+```
+
+
+##### 下载django（先激活）
 ```
 pip install django
 ```
